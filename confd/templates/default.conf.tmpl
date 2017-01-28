@@ -1,0 +1,40 @@
+{{range gets "/services/*"}}
+  {{$data := json .Value}}
+  {{if exists "$data.location"}}
+    upstream {{$data.name}} {
+      server {{$data.address}}
+    }
+  {{else}}
+# skipped {{$data.name}} 
+  {{end}}  
+{{end}}
+
+# limit_req_zone $binary_remote_addr zone=one:10m rate=50r/s;
+
+server {
+  server_name {{getv "/nginx/domain" "default"}};
+
+  {{if exists "/nginx/certs/"}}
+    ssl_certificate /etc/nginx/certs/main.pem;
+    ssl_certificate_key /etc/nginx/certs/main.key;
+  {{end}}
+
+  gzip_types text/plain text/css application/json application/x-javascript text/xml application/xml application/xml+rss text/javascript;
+
+  {{range gets "/services/*"}}
+    {{$data := json .Value}}
+    {{if exists "$data.location"}}
+
+      location {{$data.location}} {
+    
+        {{if exists "$data.rootPath"}}
+          proxy_pass http://{{$data.name}}{{$data.rootPath}};
+        {{else}}
+          proxy_pass http://{{$data.name}};
+        {{end}}
+
+#        limit_req zone=one burst=50;
+      }
+    {{end}}
+  {{end}}
+}

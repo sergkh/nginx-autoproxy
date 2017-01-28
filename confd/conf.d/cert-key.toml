@@ -1,0 +1,10 @@
+[template]
+src = "cert-key.tmpl"
+# dest = "./out-key.conf"
+dest = "/etc/nginx/certs/main.key"
+owner = "nginx"
+mode = "0644"
+keys = [
+  "/nginx/certs/key"
+]
+reload_cmd = "/usr/sbin/service nginx reload"
