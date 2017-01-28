@@ -1,16 +1,15 @@
-machine:
-  services:
-    - docker
+sudo: required
 
-dependencies:
-  override:
-    - docker build -t nginx .
+language: generic
 
-deployment:
-  hub:
-    branch: master
-    commands:
-      - docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASS https://cloud.canister.io:5000
-      - docker tag nginx cloud.canister.io:5000/sergkh/nginx:$CIRCLE_BUILD_NUM
-      - docker tag nginx cloud.canister.io:5000/sergkh/nginx:latest      
-      - docker push cloud.canister.io:5000/sergkh/nginx:latest
+services:
+  - docker
+
+before_install:
+  - docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASS
+  - docker build -t sergkh/nginx-autoproxy .
+
+script:
+  - docker tag sergkh/nginx-autoproxy:0.1 
+  - docker tag sergkh/nginx-autoproxy:latest     
+  - docker push sergkh/nginx-autoproxy
