@@ -10,6 +10,11 @@ before_install:
   - docker build -t sergkh/nginx-autoproxy .
 
 script:
+  - docker run --name proxy -d -p 9453:80 sergkh/nginx-autoproxy; sleep 20
+  - curl --retry 10 --retry-delay 5 -v http://localhost:9453
+  - docker logs proxy
+    
+after_success:  
   - docker tag sergkh/nginx-autoproxy:0.1 
   - docker tag sergkh/nginx-autoproxy:latest     
   - docker push sergkh/nginx-autoproxy
