@@ -1,6 +1,5 @@
 [template]
 src = "cert.tmpl"
-# dest = "./out-cert.conf"
 dest = "/etc/nginx/certs/main.pem"
 owner = "nginx"
 mode = "0644"
