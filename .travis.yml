@@ -15,6 +15,6 @@ script:
   - docker logs proxy
     
 after_success:  
-  - docker tag sergkh/nginx-autoproxy:0.1 
+  - docker tag sergkh/nginx-autoproxy:0.2 
   - docker tag sergkh/nginx-autoproxy:latest     
-  - docker push sergkh/nginx-autoproxy
+  - docker push sergkh/nginx-autoproxy:late

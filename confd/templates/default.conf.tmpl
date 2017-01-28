@@ -1,11 +1,9 @@
 {{range gets "/services/*"}}
   {{$data := json .Value}}
-  {{if exists "$data.location"}}
+  {{if $data.location}}
     upstream {{$data.name}} {
       server {{$data.address}}
     }
-  {{else}}
-# skipped {{$data.name}} 
   {{end}}  
 {{end}}
 
@@ -23,16 +21,13 @@ server {
 
   {{range gets "/services/*"}}
     {{$data := json .Value}}
-    {{if exists "$data.location"}}
-
+    {{if $data.location}}
       location {{$data.location}} {
-    
-        {{if exists "$data.rootPath"}}
+        {{if $data.rootPath}}
           proxy_pass http://{{$data.name}}{{$data.rootPath}};
         {{else}}
           proxy_pass http://{{$data.name}};
-        {{end}}
-
+        {{end}}  
 #        limit_req zone=one burst=50;
       }
     {{end}}

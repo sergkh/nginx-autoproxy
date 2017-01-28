@@ -1,6 +1,6 @@
 FROM nginx:1.11.8
 MAINTAINER Sergey Khruschak <sergey.khruschak@gmail.com>
-LABEL version="0.1"
+LABEL version="0.2"
 
 COPY nginx.conf /etc/nginx/nginx.conf
 COPY /tools/confd /usr/local/bin/confd
