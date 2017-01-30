@@ -2,7 +2,7 @@
   {{$data := json .Value}}
   {{if $data.location}}
     upstream {{$data.name}} {
-      server {{$data.address}}
+      server {{$data.address}};
     }
   {{end}}  
 {{end}}
@@ -11,8 +11,11 @@
 
 server {
   server_name {{getv "/nginx/domain" "default"}};
+  client_max_body_size    4096m;
 
   {{if exists "/nginx/certs/"}}
+    listen 443 ssl;
+    ssl on;
     ssl_certificate /etc/nginx/certs/main.pem;
     ssl_certificate_key /etc/nginx/certs/main.key;
   {{end}}
