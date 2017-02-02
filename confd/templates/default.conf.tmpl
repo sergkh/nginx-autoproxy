@@ -7,11 +7,9 @@
   {{end}}  
 {{end}}
 
-# limit_req_zone $binary_remote_addr zone=one:10m rate=50r/s;
-
 server {
   server_name {{getv "/nginx/domain" "default"}};
-  client_max_body_size    4096m;
+  client_max_body_size {{getv "/nginx/max_body_size" "4096m"}};
 
   {{if exists "/nginx/certs/"}}
     listen 443 ssl;
@@ -29,9 +27,8 @@ server {
         {{if $data.rootPath}}
           proxy_pass http://{{$data.name}}{{$data.rootPath}};
         {{else}}
-          proxy_pass http://{{$data.name}};
+          proxy_pass http://{{$data.name}}/;
         {{end}}  
-#        limit_req zone=one burst=50;
       }
     {{end}}
   {{end}}
